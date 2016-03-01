@@ -7,11 +7,56 @@ http://stackoverflow.com/questions/34535452/ios-swift-custom-camera-overlay
 
 var gotImage: UIImageView?
 
+extension UIImage {
+    public func imageRotatedByDegrees(degrees: CGFloat, flip: Bool) -> UIImage {
+        let radiansToDegrees: (CGFloat) -> CGFloat = {
+            return $0 * (180.0 / CGFloat(M_PI))
+        }
+        let degreesToRadians: (CGFloat) -> CGFloat = {
+            return $0 / 180.0 * CGFloat(M_PI)
+        }
+        
+        // calculate the size of the rotated view's containing box for our drawing space
+        let rotatedViewBox = UIView(frame: CGRect(origin: CGPointZero, size: size))
+        let t = CGAffineTransformMakeRotation(degreesToRadians(degrees));
+        rotatedViewBox.transform = t
+        let rotatedSize = rotatedViewBox.frame.size
+        
+        // Create the bitmap context
+        UIGraphicsBeginImageContext(rotatedSize)
+        let bitmap = UIGraphicsGetCurrentContext()
+        
+        // Move the origin to the middle of the image so we will rotate and scale around the center.
+        CGContextTranslateCTM(bitmap, rotatedSize.width / 2.0, rotatedSize.height / 2.0);
+        
+        //   // Rotate the image context
+        CGContextRotateCTM(bitmap, degreesToRadians(degrees));
+        
+        // Now, draw the rotated/scaled image into the context
+        var yFlip: CGFloat
+        
+        if(flip){
+            yFlip = CGFloat(-1.0)
+        } else {
+            yFlip = CGFloat(1.0)
+        }
+        
+        CGContextScaleCTM(bitmap, yFlip, -1.0)
+        CGContextDrawImage(bitmap, CGRectMake(-size.width / 2, -size.height / 2, size.width, size.height), CGImage)
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+}
+
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     let captureSession = AVCaptureSession()
     var previewLayer : AVCaptureVideoPreviewLayer?
     var videoCaptureOutput = AVCaptureVideoDataOutput()
+    
     
     // If we find a device we'll store it here for later use
     var captureDevice : AVCaptureDevice?
@@ -41,35 +86,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
     }
     
-    /*func focusTo(value : Float) {
-        if let device = captureDevice {
-            do {
-                try device.lockForConfiguration()
-                device.setFocusModeLockedWithLensPosition(value, completionHandler: {
-                    (time) -> Void in
-                    //
-                })
-                device.unlockForConfiguration()
-            } catch let error as NSError {
-                print(error.code)
-            }
-        }
-    }*/
-    
-    let screenWidth = UIScreen.mainScreen().bounds.size.width
-    
-    /*override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        let anyTouch = touches.first as UITouch!
-        _ = anyTouch.locationInView(self.view).x / screenWidth
-        focusTo(Float(touchPercent))
-    }*/
-    
-    /*override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        let anyTouch = touches.first as UITouch!
-        let touchPercent = anyTouch.locationInView(self.view).x / screenWidth
-        focusTo(Float(touchPercent))
-    }*/
-    
     func configureDevice() {
         if let device = captureDevice {
             do {
@@ -78,7 +94,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             } catch let error as NSError {
                 print(error.code)
             }
-            //device.focusMode = .Locked
             device.unlockForConfiguration()
         }
         
@@ -97,6 +112,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         self.view.layer.addSublayer(previewLayer!)
         previewLayer?.frame = self.view.layer.frame
         
+        videoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
+        
         let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
         
         videoCaptureOutput.setSampleBufferDelegate(self, queue: cameraQueue)
@@ -109,44 +126,48 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection:AVCaptureConnection!) {
         
-        //let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-        //let image = UIImage(data: imageData)
-        //_ = OpenCVWrapper.processImageWithOpenCV(image)
         print("frame dropped")
     }
-    /* deprecated */
     
-    func imageFromSampleBufferDep(sampleBuffer: CMSampleBuffer) -> UIImage {
-        let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        let cameraImage = CIImage(CVPixelBuffer: pixelBuffer!)
-        return UIImage(CIImage: cameraImage)
-    }
-    
-    func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> CGImageRef {
-        let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        let bytesPerRow = 5120;
-        let width = CVPixelBufferGetWidth(imageBuffer!);
-        let height = CVPixelBufferGetHeight(imageBuffer!);
-        let colorSpace = CGColorSpaceCreateDeviceRGB();
-        let baseAddress = CVPixelBufferGetBaseAddressOfPlane(imageBuffer!, 0)
+    /*
+    http://stackoverflow.com/questions/14383932/convert-cmsamplebufferref-to-uiimage 
+    */
+    func imageFromSampleBuffer(pixelBuffer: CVImageBuffer) -> UIImage? {
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
+        let address = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0)
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let width = CVPixelBufferGetWidth(pixelBuffer)
+        let height = CVPixelBufferGetHeight(pixelBuffer)
+        
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue)
-        let newContext = CGBitmapContextCreate(baseAddress, width, height, 8, bytesPerRow, colorSpace, bitmapInfo.rawValue)
-        let newImage = CGBitmapContextCreateImage(newContext);
-        return newImage!
+        
+        let context = CGBitmapContextCreate(address, width, height, 8,bytesPerRow, colorSpace, bitmapInfo.rawValue);
+        let imageRef = CGBitmapContextCreateImage(context)
+        
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
+        var resultImage : UIImage?
+        if context != nil {
+            resultImage = UIImage(CGImage: imageRef!)
+        }
+        
+        return resultImage
     }
     
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
+        let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
+        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
         
         /*http://stackoverflow.com/questions/27962944/convert-a-cmsamplebuffer-into-a-uiimage */
         print("frame received")
-        let cgImage = imageFromSampleBuffer(sampleBuffer)
-        let theImage = UIImage(CGImage: cgImage)
+        
+        var uiImage = imageFromSampleBuffer(pixelBuffer)
+        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
 
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
-        UIImageWriteToSavedPhotosAlbum(theImage, self, "image:didFinishSavingWithError:contextInfo:", nil);
-        //print(faceHaarPath, eyesHaarPath)
-        //OpenCVWrapper.processImageWithOpenCV(theImage, faceHaarPath, eyesHaarPath)
+        //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "image:didFinishSavingWithError:contextInfo:", nil);
+        OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath)
     }
     
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {

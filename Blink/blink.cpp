@@ -85,8 +85,6 @@ detectEye(cv::Mat &im, std::string faceHaar, std::string eyesHaar)
     {
         
         cv::Mat face = im(faces[i]);
-        namedWindow( "face", cv::WINDOW_AUTOSIZE );
-        imshow( "face", face);
         eyes_cascade.detectMultiScale(face, eyes, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
         if (eyes.size())
         {
@@ -95,8 +93,6 @@ detectEye(cv::Mat &im, std::string faceHaar, std::string eyesHaar)
                 cv::Mat one = face(eyes[j]);
                 cv::Mat tile;
                 tile = one(cv::Range(0, one.rows), cv::Range(10, one.cols - 10)).clone();
-                namedWindow( "eyes", cv::WINDOW_AUTOSIZE );
-                imshow( "eyes", one);
                 detectIris(one);
             }
             
