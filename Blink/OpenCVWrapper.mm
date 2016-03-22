@@ -17,11 +17,13 @@
 
 @implementation OpenCVWrapper : NSObject
 
-+ (UIImage *)processImageWithOpenCV:(UIImage *)inputImage :(NSString *)faceHaar :(NSString *)eyesHaar {
++ (bool)processImageWithOpenCV:(UIImage *)inputImage :(NSString *)faceHaar :(NSString *)eyesHaar :(NSString*)openedEyeHaar {
     cv::Mat mat = [inputImage CVMat];
     std::string *facehaar = new std::string([faceHaar UTF8String]);
     std::string *eyeshaar = new std::string([eyesHaar UTF8String]);
-    detectEye(mat, *facehaar, *eyeshaar);
+    std::string *openhaar = new std::string([openedEyeHaar UTF8String]);
+    //detectEye(mat, *facehaar, *eyeshaar);
+    detectBlink(mat, *facehaar, *eyeshaar, *openhaar);
     return [UIImage imageWithCVMat:mat];
 }
 
@@ -38,6 +40,11 @@
 - (int)detectEye:(cv::Mat&)im :(std::string)facehaar :(std::string)eyeshaar
 {
     return detectEye(im, facehaar, eyeshaar);
+}
+
+-(bool)detectBlink:(cv::Mat&)im :(std::string)facehaar :(std::string)eyeshaar :(std::string)openhaar
+{
+    return detectBlink(im, facehaar, eyeshaar, openhaar);
 }
 
 @end

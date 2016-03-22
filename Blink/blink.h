@@ -18,9 +18,22 @@
 
 using namespace std;
 
+typedef struct eyeStruct
+{
+    cv::Mat eye;
+    time_t start;
+    bool isClosed;
+    bool blinked;
+    
+} eyeStatus;
 
+//deprecated
 bool detectBlobs(cv::Mat gray);
 int detectEye(cv::Mat &im, std::string faceHaar, std::string eyesHaar);
 void detectIris(cv::Mat eyes);
+
+bool detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::string openHaar);
+void detectEyeStatus(eyeStruct &detectedEye, vector<cv::Rect> eyeRect, bool isRight);
+
 
 #endif /* blink_hpp */

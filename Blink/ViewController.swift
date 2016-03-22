@@ -126,7 +126,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection:AVCaptureConnection!) {
         
-        print("frame dropped")
+        //print("frame dropped")
     }
     
     /*
@@ -159,15 +159,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         CVPixelBufferLockBaseAddress(pixelBuffer, 0)
         
         /*http://stackoverflow.com/questions/27962944/convert-a-cmsamplebuffer-into-a-uiimage */
-        print("frame received")
+        //print("frame received")
         
         var uiImage = imageFromSampleBuffer(pixelBuffer)
         uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
 
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
+        let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
+        OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)
         //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "image:didFinishSavingWithError:contextInfo:", nil);
-        OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath)
     }
     
     func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
