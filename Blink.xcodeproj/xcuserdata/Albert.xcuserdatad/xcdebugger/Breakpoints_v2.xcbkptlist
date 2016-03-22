@@ -9,29 +9,77 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Blink/OpenCVWrapper.mm"
-            timestampString = "478294342.325452"
+            filePath = "Blink/blink.cpp"
+            timestampString = "480343848.642403"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "+processImageWithOpenCV:::"
-            landmarkType = "5">
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "detectBlobs(cv::Mat gray)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Blink/blink.cpp"
-            timestampString = "478546555.017529"
+            timestampString = "480345936.317904"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "detectEye(cv::Mat &amp;im, std::string faceHaar, std::string eyesHaar)"
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "detectBlink(cv::Mat &amp;image, std::string faceHaar, std::string eyesHaar, std::string openHaar)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Blink/blink.cpp"
+            timestampString = "480346247.188577"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
+            landmarkName = "detectEyeStatus(eyeStruct &amp;detectedEye, vector&lt;cv::Rect&gt; eyeRect, bool isRight)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Blink/blink.cpp"
+            timestampString = "480346382.846323"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "detectEyeStatus(eyeStruct &amp;detectedEye, vector&lt;cv::Rect&gt; eyeRect, bool isRight)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Blink/blink.cpp"
+            timestampString = "480346543.496646"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "detectBlink(cv::Mat &amp;image, std::string faceHaar, std::string eyesHaar, std::string openHaar)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

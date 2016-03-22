@@ -106,13 +106,12 @@ detectEyeStatus(eyeStruct &detectedEye, vector<cv::Rect> eyeRect, bool isRight)
     one_eye_cascade.detectMultiScale(detectedEye.eye, eyeRect, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
     if (eyeRect.size() == 0)
     {
-        cout << "right closed" << endl;
         detectedEye.isClosed = true;
         time_t cur;
         if (detectedEye.start != 0)
         {
             time_t endless = time(&cur);
-            if (difftime(endless, detectedEye.start) > 1)
+            if (difftime(endless, detectedEye.start) >= 1)
             {
                 detectedEye.blinked = true;
             }
@@ -125,6 +124,7 @@ detectEyeStatus(eyeStruct &detectedEye, vector<cv::Rect> eyeRect, bool isRight)
     else if (detectedEye.start != 0)
     {
         detectedEye.isClosed = false;
+        detectedEye.blinked = false;
         detectedEye.start = 0;
     }
 }
@@ -155,7 +155,7 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
                 detectEyeStatus(rightEye, right, true);
                 
                 leftEye.eye = detectedEyes(cv::Range(0, detectedEyes.rows), cv::Range(detectedEyes.cols / 2, detectedEyes.cols)).clone();
-                //detectEyeStatus(leftEye, left, false);
+                detectEyeStatus(leftEye, left, false);
                 
             }
             

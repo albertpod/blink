@@ -167,7 +167,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
-        OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)
+        if OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)
+        {
+            print("blinked")
+        }
         //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "image:didFinishSavingWithError:contextInfo:", nil);
     }
     

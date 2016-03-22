@@ -23,8 +23,8 @@
     std::string *eyeshaar = new std::string([eyesHaar UTF8String]);
     std::string *openhaar = new std::string([openedEyeHaar UTF8String]);
     //detectEye(mat, *facehaar, *eyeshaar);
-    detectBlink(mat, *facehaar, *eyeshaar, *openhaar);
-    return [UIImage imageWithCVMat:mat];
+    
+    return detectBlink(mat, *facehaar, *eyeshaar, *openhaar);
 }
 
 - (bool)detectBlobs:(cv::Mat)gray
