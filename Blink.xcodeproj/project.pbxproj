@@ -10,6 +10,7 @@
 		505733E91CA16F55001752CC /* eyes.xml in Resources */ = {isa = PBXBuildFile; fileRef = 505733E71CA16F55001752CC /* eyes.xml */; };
 		505733EA1CA16F55001752CC /* face.xml in Resources */ = {isa = PBXBuildFile; fileRef = 505733E81CA16F55001752CC /* face.xml */; };
 		505733EC1CA16F60001752CC /* opened_eye.xml in Resources */ = {isa = PBXBuildFile; fileRef = 505733EB1CA16F60001752CC /* opened_eye.xml */; };
+		505733F21CA193D6001752CC /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505733F11CA193D6001752CC /* UIImageExtension.swift */; };
 		50C3FC491C775EF900D16E07 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */; };
 		50C3FC4A1C775EF900D16E07 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC481C775EF900D16E07 /* UIImage+OpenCV.mm */; };
 		50C3FC4D1C775F8600D16E07 /* blink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC4B1C775F8600D16E07 /* blink.cpp */; };
@@ -41,16 +42,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		505733E71CA16F55001752CC /* eyes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = eyes.xml; path = "../../../opencv-3.1.0/data/haarcascades/eyes.xml"; sourceTree = "<group>"; };
-		505733E81CA16F55001752CC /* face.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = face.xml; path = "../../../opencv-3.1.0/data/haarcascades/face.xml"; sourceTree = "<group>"; };
-		505733EB1CA16F60001752CC /* opened_eye.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = opened_eye.xml; path = "../../../opencv-3.1.0/data/haarcascades/opened_eye.xml"; sourceTree = "<group>"; };
+		505733E71CA16F55001752CC /* eyes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = eyes.xml; path = "../../opencv-3.1.0/data/haarcascades/eyes.xml"; sourceTree = "<group>"; };
+		505733E81CA16F55001752CC /* face.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = face.xml; path = "../../opencv-3.1.0/data/haarcascades/face.xml"; sourceTree = "<group>"; };
+		505733EB1CA16F60001752CC /* opened_eye.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = opened_eye.xml; path = "../../opencv-3.1.0/data/haarcascades/opened_eye.xml"; sourceTree = "<group>"; };
+		505733F11CA193D6001752CC /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		50C3FC441C775AC600D16E07 /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		50C3FC451C775EF900D16E07 /* Blink-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Blink-Bridging-Header.h"; sourceTree = "<group>"; };
 		50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		50C3FC471C775EF900D16E07 /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		50C3FC481C775EF900D16E07 /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
-		50C3FC4B1C775F8600D16E07 /* blink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blink.cpp; sourceTree = "<group>"; };
-		50C3FC4C1C775F8600D16E07 /* blink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blink.h; sourceTree = "<group>"; };
+		50C3FC4B1C775F8600D16E07 /* blink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = blink.cpp; path = Blink/blink.cpp; sourceTree = "<group>"; };
+		50C3FC4C1C775F8600D16E07 /* blink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blink.h; path = Blink/blink.h; sourceTree = "<group>"; };
 		50F394891BF771FD00B4F571 /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50F3948C1BF771FD00B4F571 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50F3948E1BF771FD00B4F571 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -94,9 +96,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		505733ED1CA18347001752CC /* cascades */ = {
+			isa = PBXGroup;
+			children = (
+				505733EB1CA16F60001752CC /* opened_eye.xml */,
+				505733E71CA16F55001752CC /* eyes.xml */,
+				505733E81CA16F55001752CC /* face.xml */,
+			);
+			name = cascades;
+			sourceTree = "<group>";
+		};
+		505733EE1CA18B4E001752CC /* coreDetector */ = {
+			isa = PBXGroup;
+			children = (
+				50C3FC4C1C775F8600D16E07 /* blink.h */,
+				50C3FC4B1C775F8600D16E07 /* blink.cpp */,
+			);
+			name = coreDetector;
+			sourceTree = "<group>";
+		};
 		50F394801BF771FC00B4F571 = {
 			isa = PBXGroup;
 			children = (
+				505733EE1CA18B4E001752CC /* coreDetector */,
+				505733ED1CA18347001752CC /* cascades */,
 				50F394BA1BF773CD00B4F571 /* Frameworks */,
 				50F3948B1BF771FD00B4F571 /* Blink */,
 				50F394A01BF771FD00B4F571 /* BlinkTests */,
@@ -118,11 +141,6 @@
 		50F3948B1BF771FD00B4F571 /* Blink */ = {
 			isa = PBXGroup;
 			children = (
-				505733EB1CA16F60001752CC /* opened_eye.xml */,
-				505733E71CA16F55001752CC /* eyes.xml */,
-				505733E81CA16F55001752CC /* face.xml */,
-				50C3FC4C1C775F8600D16E07 /* blink.h */,
-				50C3FC4B1C775F8600D16E07 /* blink.cpp */,
 				50C3FC451C775EF900D16E07 /* Blink-Bridging-Header.h */,
 				50C3FC441C775AC600D16E07 /* OpenCVWrapper.h */,
 				50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */,
@@ -134,6 +152,7 @@
 				50F394931BF771FD00B4F571 /* Assets.xcassets */,
 				50F394951BF771FD00B4F571 /* LaunchScreen.storyboard */,
 				50F394981BF771FD00B4F571 /* Info.plist */,
+				505733F11CA193D6001752CC /* UIImageExtension.swift */,
 			);
 			path = Blink;
 			sourceTree = "<group>";
@@ -308,6 +327,7 @@
 				50C3FC4D1C775F8600D16E07 /* blink.cpp in Sources */,
 				50F3948D1BF771FD00B4F571 /* AppDelegate.swift in Sources */,
 				50C3FC491C775EF900D16E07 /* OpenCVWrapper.mm in Sources */,
+				505733F21CA193D6001752CC /* UIImageExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

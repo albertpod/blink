@@ -6,63 +6,28 @@ http://stackoverflow.com/questions/34535452/ios-swift-custom-camera-overlay
 */
 
 var gotImage: UIImageView?
+var camFrame : CGRect?
+var cameraView : UIView!
 
-extension UIImage {
-    public func imageRotatedByDegrees(degrees: CGFloat, flip: Bool) -> UIImage {
-        let radiansToDegrees: (CGFloat) -> CGFloat = {
-            return $0 * (180.0 / CGFloat(M_PI))
-        }
-        let degreesToRadians: (CGFloat) -> CGFloat = {
-            return $0 / 180.0 * CGFloat(M_PI)
-        }
-        
-        // calculate the size of the rotated view's containing box for our drawing space
-        let rotatedViewBox = UIView(frame: CGRect(origin: CGPointZero, size: size))
-        let t = CGAffineTransformMakeRotation(degreesToRadians(degrees));
-        rotatedViewBox.transform = t
-        let rotatedSize = rotatedViewBox.frame.size
-        
-        // Create the bitmap context
-        UIGraphicsBeginImageContext(rotatedSize)
-        let bitmap = UIGraphicsGetCurrentContext()
-        
-        // Move the origin to the middle of the image so we will rotate and scale around the center.
-        CGContextTranslateCTM(bitmap, rotatedSize.width / 2.0, rotatedSize.height / 2.0);
-        
-        //   // Rotate the image context
-        CGContextRotateCTM(bitmap, degreesToRadians(degrees));
-        
-        // Now, draw the rotated/scaled image into the context
-        var yFlip: CGFloat
-        
-        if(flip){
-            yFlip = CGFloat(-1.0)
-        } else {
-            yFlip = CGFloat(1.0)
-        }
-        
-        CGContextScaleCTM(bitmap, yFlip, -1.0)
-        CGContextDrawImage(bitmap, CGRectMake(-size.width / 2, -size.height / 2, size.width, size.height), CGImage)
-        
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage
-    }
-}
-
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
     
     let captureSession = AVCaptureSession()
     var previewLayer : AVCaptureVideoPreviewLayer?
     var videoCaptureOutput = AVCaptureVideoDataOutput()
     
-    
+    var documentController: UIDocumentInteractionController!
     // If we find a device we'll store it here for later use
     var captureDevice : AVCaptureDevice?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        camFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)
+        cameraView = UIView(frame: camFrame!)
+        cameraView!.backgroundColor = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
+        cameraView!.alpha = 0.5
+        cameraView!.center = self.view.center;
+        self.view.addSubview(cameraView!)
         
         // Do any additional setup after loading the view, typically from a nib.
         captureSession.sessionPreset = AVCaptureSessionPresetHigh
@@ -101,6 +66,12 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func beginSession() {
         
+        var bounds : CGRect
+        dispatch_async(dispatch_get_main_queue(), {
+            // code here
+        })
+        let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
+        
         configureDevice()
         do {
             try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
@@ -109,12 +80,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        
+        bounds = cameraView!.layer.frame
+        previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
+        previewLayer!.bounds = bounds
+        previewLayer!.position = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
         self.view.layer.addSublayer(previewLayer!)
-        previewLayer?.frame = self.view.layer.frame
         
         videoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
-        
-        let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
         
         videoCaptureOutput.setSampleBufferDelegate(self, queue: cameraQueue)
         
@@ -125,65 +98,80 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection:AVCaptureConnection!) {
-        
         //print("frame dropped")
     }
     
-    /*
-    http://stackoverflow.com/questions/14383932/convert-cmsamplebufferref-to-uiimage 
-    */
-    func imageFromSampleBuffer(pixelBuffer: CVImageBuffer) -> UIImage? {
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
-        let address = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0)
-        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedFirst.rawValue | CGBitmapInfo.ByteOrder32Little.rawValue)
-        
-        let context = CGBitmapContextCreate(address, width, height, 8,bytesPerRow, colorSpace, bitmapInfo.rawValue);
-        let imageRef = CGBitmapContextCreateImage(context)
-        
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
-        var resultImage : UIImage?
-        if context != nil {
-            resultImage = UIImage(CGImage: imageRef!)
-        }
-        
-        return resultImage
-    }
-    
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
-        let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
-        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
         
-        /*http://stackoverflow.com/questions/27962944/convert-a-cmsamplebuffer-into-a-uiimage */
-        //print("frame received")
-        
-        var uiImage = imageFromSampleBuffer(pixelBuffer)
-        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
-
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
-        if OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)
-        {
+        let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
+        var uiImage = imageFromSampleBuffer(pixelBuffer)
+        
+        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
+        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
+        
+        /*http://stackoverflow.com/questions/27962944/convert-a-cmsamplebuffer-into-a-uiimage */
+        //print("frame received")
+
+        if OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath) {
             print("blinked")
+            captureSession.stopRunning()
+            /*http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error*/
+            dispatch_async(dispatch_get_main_queue(), {
+                self.shareToInstagram(uiImage!)
+            })
+            captureSession.startRunning()
         }
-        //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "image:didFinishSavingWithError:contextInfo:", nil);
+        //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "imageSaveMethod:didFinishSavingWithError:contextInfo:", nil);
     }
     
-    func image(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
+    func imageSaveMethod(image: UIImage, didFinishSavingWithError error: NSError?, contextInfo:UnsafePointer<Void>) {
         if error == nil {
             
             let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .Alert)
             ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
             presentViewController(ac, animated: true, completion: nil)
-        } else {
+        }
+        else {
             let ac = UIAlertController(title: "Save error", message: error?.localizedDescription, preferredStyle: .Alert)
             ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
             presentViewController(ac, animated: true, completion: nil)
+        }
+    }
+    
+    func shareToInstagram(image: UIImage) {
+        
+        let instagramURL = NSURL(string: "instagram://app")
+        
+        if (UIApplication.sharedApplication().canOpenURL(instagramURL!)) {
+            
+            let imageData = UIImageJPEGRepresentation(image, 100)
+            let captionString = "caption"
+            let writePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent("instagram.igo")
+            
+            if imageData?.writeToFile(writePath, atomically: true) == false {
+                
+                return
+                
+            } else {
+                
+                let fileURL = NSURL(fileURLWithPath: writePath)
+                
+                self.documentController = UIDocumentInteractionController(URL: fileURL)
+                
+                self.documentController.delegate = self
+                
+                self.documentController.UTI = "com.instagram.exlusivegram"
+                
+                self.documentController.annotation = NSDictionary(object: captionString, forKey: "InstagramCaption")
+                self.documentController.presentOpenInMenuFromRect(self.view.frame, inView: self.view, animated: true)
+                
+            }
+            
+        } else {
+            print(" Instagram isn't installed ")
         }
     }
     
