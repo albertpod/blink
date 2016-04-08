@@ -48,6 +48,7 @@ extension UIImage {
         
         return newImage
     }
+
 }
 
 /*
@@ -73,4 +74,12 @@ func imageFromSampleBuffer(pixelBuffer: CVImageBuffer) -> UIImage? {
     }
     
     return resultImage
+}
+
+extension UIImage {
+    func crop(toRect rect:CGRect) -> UIImage {
+        let imageRef:CGImageRef = CGImageCreateWithImageInRect(self.CGImage, rect)!
+        let cropped:UIImage = UIImage(CGImage:imageRef)
+        return cropped
+    }
 }

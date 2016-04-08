@@ -16,12 +16,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 
+#define MILLION 1000000
+
 using namespace std;
 
 typedef struct eyeStruct
 {
     cv::Mat eye;
-    time_t start;
+    struct timeval start;
     bool isClosed;
     bool blinked;
     
@@ -35,5 +37,6 @@ void detectIris(cv::Mat eyes);
 bool detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::string openHaar);
 void detectEyeStatus(eyeStruct &detectedEye, vector<cv::Rect> eyeRect, bool isRight);
 
+struct timeval timespec_diff(struct timeval *start, struct timeval *stop);
 
 #endif /* blink_hpp */

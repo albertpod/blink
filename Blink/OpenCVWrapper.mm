@@ -27,21 +27,6 @@
     return detectBlink(mat, *facehaar, *eyeshaar, *openhaar);
 }
 
-- (bool)detectBlobs:(cv::Mat)gray
-{
-    return detectBlobs(gray);
-}
-
-- (void)detectIris:(cv::Mat)eyes
-{
-    return detectIris(eyes);
-}
-
-- (int)detectEye:(cv::Mat&)im :(std::string)facehaar :(std::string)eyeshaar
-{
-    return detectEye(im, facehaar, eyeshaar);
-}
-
 -(bool)detectBlink:(cv::Mat&)im :(std::string)facehaar :(std::string)eyeshaar :(std::string)openhaar
 {
     return detectBlink(im, facehaar, eyeshaar, openhaar);

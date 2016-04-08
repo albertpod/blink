@@ -1,12 +1,6 @@
 import UIKit
 import AVFoundation
 
-/*
-http://stackoverflow.com/questions/34535452/ios-swift-custom-camera-overlay
-*/
-
-var gotImage: UIImageView?
-var camFrame : CGRect?
 var cameraView : UIView!
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, UIDocumentInteractionControllerDelegate {
@@ -21,12 +15,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        /*let darkBlur = UIBlurEffect(style: UIBlurEffectStyle.Dark)
+        let blurView = UIVisualEffectView(effect: darkBlur)
+        blurView.frame = self.view.bounds
+        self.view.addSubview(blurView)*/
+        print(self.view.bounds)
         
-        camFrame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)
-        cameraView = UIView(frame: camFrame!)
+        cameraView = UIView(frame: CGRectMake(0, self.view.frame.width / 4, self.view.frame.size.width, self.view.frame.size.width))
         cameraView!.backgroundColor = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
-        cameraView!.alpha = 0.5
-        cameraView!.center = self.view.center;
+        cameraView!.alpha = 0
+        //cameraView!.center = self.view.center;
         self.view.addSubview(cameraView!)
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -51,6 +49,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
     }
     
+    override func  preferredStatusBarStyle()-> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent
+    }
+    
     func configureDevice() {
         if let device = captureDevice {
             do {
@@ -67,9 +69,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     func beginSession() {
         
         var bounds : CGRect
-        dispatch_async(dispatch_get_main_queue(), {
-            // code here
-        })
+
         let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
         
         configureDevice()
@@ -85,6 +85,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         previewLayer!.bounds = bounds
         previewLayer!.position = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
+        previewLayer!.cornerRadius = 10
+        
+        //previewLayer!.borderColor = UIColor.whiteColor().colorWithAlphaComponent(0.5).CGColor
         self.view.layer.addSublayer(previewLayer!)
         
         videoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
@@ -98,32 +101,46 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection:AVCaptureConnection!) {
+        
         //print("frame dropped")
     }
     
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
-        
+        print("frame recieved")
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
         let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
+        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
         var uiImage = imageFromSampleBuffer(pixelBuffer)
         
-        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
-        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
         
-        /*http://stackoverflow.com/questions/27962944/convert-a-cmsamplebuffer-into-a-uiimage */
-        //print("frame received")
-
-        if OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath) {
+        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
+        /*print(self.view.bounds)
+        var (_, rect) = detectEyeBlink(uiImage)
+        var box : UIView
+        if rect != nil {
+            box = UIView(frame: rect!)
+            box.backgroundColor = UIColor.clearColor()
+            box.layer.borderColor = UIColor.cyanColor().CGColor
+            box.layer.borderWidth = 10
+            dispatch_async(dispatch_get_main_queue(), {
+                print(box.bounds)
+                self.view.addSubview(box)
+            })
+        }*/
+        let (detected, _) = detectEyeBlink(uiImage)
+        if  OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath) {
+            
             print("blinked")
-            captureSession.stopRunning()
-            /*http://stackoverflow.com/questions/28302019/getting-a-this-application-is-modifying-the-autolayout-engine-error*/
+            //performSegueWithIdentifier("showPhoto", sender : nil)
             dispatch_async(dispatch_get_main_queue(), {
                 self.shareToInstagram(uiImage!)
             })
-            captureSession.startRunning()
+            
         }
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
+        
         //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "imageSaveMethod:didFinishSavingWithError:contextInfo:", nil);
     }
     
