@@ -17,14 +17,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="back" translatesAutoresizingMaskIntoConstraints="NO" id="EDk-Ku-b0k">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="EDk-Ku-b0k">
                                 <rect key="frame" x="0.0" y="0.0" width="325" height="570"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ7-uk-og8">
+                                <rect key="frame" x="141" y="486" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" red="0.76426649085335896" green="0.25988050578864264" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="timerLabel" destination="fZ7-uk-og8" id="Mo5-Sa-L0H"/>
                         <segue destination="hkn-QJ-n85" kind="show" identifier="showPhoto" id="Cy6-aO-sAQ"/>
                     </connections>
                 </viewController>
@@ -32,10 +39,10 @@
             </objects>
             <point key="canvasLocation" x="316" y="506"/>
         </scene>
-        <!--View Controller-->
+        <!--Photo View Controller-->
         <scene sceneID="A8d-Ea-Ftg">
             <objects>
-                <viewController id="hkn-QJ-n85" sceneMemberID="viewController">
+                <viewController id="hkn-QJ-n85" customClass="PhotoViewController" customModule="Blink" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qJ7-gp-ZJe"/>
                         <viewControllerLayoutGuide type="bottom" id="yne-BG-Klg"/>
@@ -43,17 +50,35 @@
                     <view key="view" contentMode="scaleToFill" id="q0m-0a-NyA">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="dMg-Bi-bd7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uBu-8K-WsE">
+                                <rect key="frame" x="0.0" y="119" width="320" height="320"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3U7-xB-VEl">
+                                <rect key="frame" x="136" y="456" width="49" height="50"/>
+                                <state key="normal" image="back button"/>
+                                <connections>
+                                    <segue destination="sdN-3K-1Zu" kind="show" id="pht-5t-40R"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="zH4-wV-XZj"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="sendedPhoto" destination="uBu-8K-WsE" id="Wzn-QC-Cc3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p17-Xm-rol" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="824" y="506"/>
+            <point key="canvasLocation" x="828" y="506"/>
         </scene>
     </scenes>
     <resources>
-        <image name="back" width="744" height="1392"/>
+        <image name="back button" width="64" height="64"/>
+        <image name="background" width="640" height="1136"/>
     </resources>
 </document>
