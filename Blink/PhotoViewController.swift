@@ -7,14 +7,72 @@
 //
 
 import UIKit
+import AVFoundation
 
-class PhotoViewController: UIViewController, UIDocumentInteractionControllerDelegate {
+class PhotoViewController: UIViewController, UIDocumentInteractionControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
     @IBOutlet weak var sendedPhoto: UIImageView!
     var documentController: UIDocumentInteractionController!
     var postingPhoto : UIImage?
+    var captureSession = AVCaptureSession()
+    var captureDevice : AVCaptureDevice?
+    var videoCaptureOutput = AVCaptureVideoDataOutput()
     
     override func viewDidLoad() {
         sendedPhoto.image = postingPhoto
+        let devices = AVCaptureDevice.devices()
+        
+        // Loop through all the capture devices on this phone
+        for device in devices {
+            // Make sure this particular device supports video
+            if (device.hasMediaType(AVMediaTypeVideo)) {
+                // Finally check the position and confirm we've got the back camera
+                if(device.position == AVCaptureDevicePosition.Front) {
+                    captureDevice = device as? AVCaptureDevice
+                    if captureDevice != nil {
+                        print("Capture device found")
+                        beginCheckingSmile()
+                    }
+                }
+            }
+        }
+
+    }
+    
+    func configureDevice() {
+        if let device = captureDevice {
+            do {
+                try device.lockForConfiguration()
+                
+            } catch let error as NSError {
+                print(error.code)
+            }
+            device.unlockForConfiguration()
+        }
+        
+    }
+
+    func beginCheckingSmile() {
+        
+        configureDevice()
+        do {
+            try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
+        } catch let error as NSError {
+            print(error.code)
+        }
+        
+        let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
+        
+        videoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
+        
+        videoCaptureOutput.setSampleBufferDelegate(self, queue: cameraQueue)
+        
+        captureSession.addOutput(videoCaptureOutput)
+        
+        captureSession.startRunning()
+    }
+
+    func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
+        print("smile recieved")
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -9,7 +9,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var counter = 5
     var uiImage : UIImage?
     var timer = NSTimer()
-    var detected = false
+    var detectedBlink = false
+    var detectedSmile = false
     var detectedTime : NSDate?
     let captureSession = AVCaptureSession()
     var previewLayer : AVCaptureVideoPreviewLayer?
@@ -121,9 +122,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         uiImage = imageFromSampleBuffer(pixelBuffer)
         uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
         uiImage = uiImage?.cropsToSquare()
-        if counter < 1 {
+        if counter <= 0 {
             captureSession.stopRunning()
-            detected = false
+            detectedBlink = false
             performSegueWithIdentifier("showPhoto", sender : nil)
             timer.invalidate()
             counter = 5
@@ -131,9 +132,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
-        
-        (detected, _) = detectEyeBlink(uiImage)
-        if  detected/*OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)*/ {
+        detectedBlink = detectEyeBlink(uiImage)
+        if detectedBlink && counter == 5
+        /*OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)*/ {
             /*dispatch_async(dispatch_get_main_queue(), {
                 self.shareToInstagram(uiImage!)
             })*/
@@ -141,6 +142,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             timer = NSTimer(fireDate: NSDate().dateByAddingTimeInterval(0), interval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         }
+
+        detectedSmile = detectSmile(uiImage)
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
         
         //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "imageSaveMethod:didFinishSavingWithError:contextInfo:", nil);
@@ -154,3 +157,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
     }
 }
+extension UIViewController {
+    func canPerformSegue(id: String) -> Bool {
+        let segues = self.valueForKey("storyboardSegueTemplates") as? [NSObject]
+        let filtered = segues?.filter({ $0.valueForKey("identifier") as? String == id })
+        return (filtered?.count > 0) ?? false
+    }
+}
+/*https://www.hackingwithswift.com/example-code/system/how-to-run-code-at-a-specific-time*/

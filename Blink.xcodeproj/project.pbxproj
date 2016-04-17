@@ -18,6 +18,7 @@
 		50A8F5651CC41A78008F33A3 /* eyes.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5621CC41A78008F33A3 /* eyes.xml */; };
 		50A8F5661CC41A78008F33A3 /* face.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5631CC41A78008F33A3 /* face.xml */; };
 		50A8F5671CC41A78008F33A3 /* opened_eye.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5641CC41A78008F33A3 /* opened_eye.xml */; };
+		50A8F5691CC42124008F33A3 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5681CC42124008F33A3 /* .gitignore */; };
 		50C3FC491C775EF900D16E07 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */; };
 		50C3FC4A1C775EF900D16E07 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC481C775EF900D16E07 /* UIImage+OpenCV.mm */; };
 		50C3FC4D1C775F8600D16E07 /* blink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC4B1C775F8600D16E07 /* blink.cpp */; };
@@ -56,6 +57,7 @@
 		50A8F5621CC41A78008F33A3 /* eyes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = eyes.xml; path = "../../opencv-3.1.0/data/haarcascades/eyes.xml"; sourceTree = "<group>"; };
 		50A8F5631CC41A78008F33A3 /* face.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = face.xml; path = "../../opencv-3.1.0/data/haarcascades/face.xml"; sourceTree = "<group>"; };
 		50A8F5641CC41A78008F33A3 /* opened_eye.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = opened_eye.xml; path = "../../opencv-3.1.0/data/haarcascades/opened_eye.xml"; sourceTree = "<group>"; };
+		50A8F5681CC42124008F33A3 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		50C3FC441C775AC600D16E07 /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		50C3FC451C775EF900D16E07 /* Blink-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Blink-Bridging-Header.h"; sourceTree = "<group>"; };
 		50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 		50F394801BF771FC00B4F571 = {
 			isa = PBXGroup;
 			children = (
+				50A8F5681CC42124008F33A3 /* .gitignore */,
 				505733EE1CA18B4E001752CC /* coreDetector */,
 				505733ED1CA18347001752CC /* cascades */,
 				50F394BA1BF773CD00B4F571 /* Frameworks */,
@@ -154,12 +157,12 @@
 				50C3FC441C775AC600D16E07 /* OpenCVWrapper.h */,
 				50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */,
 				50A8F5571CC41510008F33A3 /* ViewController.swift */,
+				50A8F55E1CC41A5D008F33A3 /* PhotoViewController.swift */,
 				50C3FC471C775EF900D16E07 /* UIImage+OpenCV.h */,
 				50C3FC481C775EF900D16E07 /* UIImage+OpenCV.mm */,
 				50F3948C1BF771FD00B4F571 /* AppDelegate.swift */,
 				50A8F55C1CC41A5D008F33A3 /* Assets.xcassets */,
 				50A8F55D1CC41A5D008F33A3 /* Main.storyboard */,
-				50A8F55E1CC41A5D008F33A3 /* PhotoViewController.swift */,
 				50F394981BF771FD00B4F571 /* Info.plist */,
 				50647A7A1CA992D800E77D91 /* DrawView.swift */,
 			);
@@ -305,6 +308,7 @@
 				50A8F5671CC41A78008F33A3 /* opened_eye.xml in Resources */,
 				50A8F5651CC41A78008F33A3 /* eyes.xml in Resources */,
 				50A8F55F1CC41A5D008F33A3 /* Assets.xcassets in Resources */,
+				50A8F5691CC42124008F33A3 /* .gitignore in Resources */,
 				50A8F5661CC41A78008F33A3 /* face.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,7 @@
 
 import Foundation
 
-func detectEyeBlink(capturedImage : UIImage!) -> (Bool, CGRect?) {
+func detectEyeBlink(capturedImage : UIImage!) -> Bool {
     
     let ciImage = CIImage(CGImage: capturedImage.CGImage!)
     ciImage.imageByCroppingToRect(CGRectMake(0, 0, 320, 320))
@@ -18,13 +18,13 @@ func detectEyeBlink(capturedImage : UIImage!) -> (Bool, CGRect?) {
     for f in features as! [CIFaceFeature] {
         
         if (f.leftEyeClosed != f.rightEyeClosed) {
-            return (true, f.bounds)
+            return true
         }
         else {
-            return (false, f.bounds)
+            return false
         }
 
     }
-    return (false, nil)
+    return false
     
 }
