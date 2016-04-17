@@ -7,19 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		505733E91CA16F55001752CC /* eyes.xml in Resources */ = {isa = PBXBuildFile; fileRef = 505733E71CA16F55001752CC /* eyes.xml */; };
-		505733EA1CA16F55001752CC /* face.xml in Resources */ = {isa = PBXBuildFile; fileRef = 505733E81CA16F55001752CC /* face.xml */; };
-		505733EC1CA16F60001752CC /* opened_eye.xml in Resources */ = {isa = PBXBuildFile; fileRef = 505733EB1CA16F60001752CC /* opened_eye.xml */; };
-		505733F21CA193D6001752CC /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505733F11CA193D6001752CC /* UIImageExtension.swift */; };
 		50647A791CA9710D00E77D91 /* DetectBlink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50647A781CA9710D00E77D91 /* DetectBlink.swift */; };
 		50647A7B1CA992D800E77D91 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50647A7A1CA992D800E77D91 /* DrawView.swift */; };
+		50A8F5521CC41371008F33A3 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8F5511CC41371008F33A3 /* UIImageExtension.swift */; };
+		50A8F5581CC41510008F33A3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8F5571CC41510008F33A3 /* ViewController.swift */; };
+		50A8F55B1CC41A48008F33A3 /* DetectSmile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8F55A1CC41A48008F33A3 /* DetectSmile.swift */; };
+		50A8F55F1CC41A5D008F33A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F55C1CC41A5D008F33A3 /* Assets.xcassets */; };
+		50A8F5601CC41A5D008F33A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F55D1CC41A5D008F33A3 /* Main.storyboard */; };
+		50A8F5611CC41A5D008F33A3 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A8F55E1CC41A5D008F33A3 /* PhotoViewController.swift */; };
+		50A8F5651CC41A78008F33A3 /* eyes.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5621CC41A78008F33A3 /* eyes.xml */; };
+		50A8F5661CC41A78008F33A3 /* face.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5631CC41A78008F33A3 /* face.xml */; };
+		50A8F5671CC41A78008F33A3 /* opened_eye.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50A8F5641CC41A78008F33A3 /* opened_eye.xml */; };
 		50C3FC491C775EF900D16E07 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */; };
 		50C3FC4A1C775EF900D16E07 /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC481C775EF900D16E07 /* UIImage+OpenCV.mm */; };
 		50C3FC4D1C775F8600D16E07 /* blink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C3FC4B1C775F8600D16E07 /* blink.cpp */; };
 		50F3948D1BF771FD00B4F571 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F3948C1BF771FD00B4F571 /* AppDelegate.swift */; };
-		50F3948F1BF771FD00B4F571 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F3948E1BF771FD00B4F571 /* ViewController.swift */; };
-		50F394921BF771FD00B4F571 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50F394901BF771FD00B4F571 /* Main.storyboard */; };
-		50F394941BF771FD00B4F571 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50F394931BF771FD00B4F571 /* Assets.xcassets */; };
 		50F394A21BF771FD00B4F571 /* BlinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F394A11BF771FD00B4F571 /* BlinkTests.swift */; };
 		50F394AD1BF771FD00B4F571 /* BlinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F394AC1BF771FD00B4F571 /* BlinkUITests.swift */; };
 		50F394C61BF7744000B4F571 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50F394C21BF773CD00B4F571 /* opencv2.framework */; };
@@ -43,12 +45,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		505733E71CA16F55001752CC /* eyes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = eyes.xml; path = "../../opencv-3.1.0/data/haarcascades/eyes.xml"; sourceTree = "<group>"; };
-		505733E81CA16F55001752CC /* face.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = face.xml; path = "../../opencv-3.1.0/data/haarcascades/face.xml"; sourceTree = "<group>"; };
-		505733EB1CA16F60001752CC /* opened_eye.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = opened_eye.xml; path = "../../opencv-3.1.0/data/haarcascades/opened_eye.xml"; sourceTree = "<group>"; };
-		505733F11CA193D6001752CC /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		50647A781CA9710D00E77D91 /* DetectBlink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetectBlink.swift; path = Blink/DetectBlink.swift; sourceTree = "<group>"; };
 		50647A7A1CA992D800E77D91 /* DrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
+		50A8F5511CC41371008F33A3 /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = SOURCE_ROOT; };
+		50A8F5571CC41510008F33A3 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		50A8F55A1CC41A48008F33A3 /* DetectSmile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DetectSmile.swift; path = Blink/DetectSmile.swift; sourceTree = "<group>"; };
+		50A8F55C1CC41A5D008F33A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		50A8F55D1CC41A5D008F33A3 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		50A8F55E1CC41A5D008F33A3 /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		50A8F5621CC41A78008F33A3 /* eyes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = eyes.xml; path = "../../opencv-3.1.0/data/haarcascades/eyes.xml"; sourceTree = "<group>"; };
+		50A8F5631CC41A78008F33A3 /* face.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = face.xml; path = "../../opencv-3.1.0/data/haarcascades/face.xml"; sourceTree = "<group>"; };
+		50A8F5641CC41A78008F33A3 /* opened_eye.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = opened_eye.xml; path = "../../opencv-3.1.0/data/haarcascades/opened_eye.xml"; sourceTree = "<group>"; };
 		50C3FC441C775AC600D16E07 /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		50C3FC451C775EF900D16E07 /* Blink-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Blink-Bridging-Header.h"; sourceTree = "<group>"; };
 		50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
@@ -58,9 +65,6 @@
 		50C3FC4C1C775F8600D16E07 /* blink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blink.h; path = Blink/blink.h; sourceTree = "<group>"; };
 		50F394891BF771FD00B4F571 /* Blink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50F3948C1BF771FD00B4F571 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		50F3948E1BF771FD00B4F571 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		50F394911BF771FD00B4F571 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		50F394931BF771FD00B4F571 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		50F394981BF771FD00B4F571 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50F3949D1BF771FD00B4F571 /* BlinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50F394A11BF771FD00B4F571 /* BlinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkTests.swift; sourceTree = "<group>"; };
@@ -101,9 +105,9 @@
 		505733ED1CA18347001752CC /* cascades */ = {
 			isa = PBXGroup;
 			children = (
-				505733EB1CA16F60001752CC /* opened_eye.xml */,
-				505733E71CA16F55001752CC /* eyes.xml */,
-				505733E81CA16F55001752CC /* face.xml */,
+				50A8F5621CC41A78008F33A3 /* eyes.xml */,
+				50A8F5631CC41A78008F33A3 /* face.xml */,
+				50A8F5641CC41A78008F33A3 /* opened_eye.xml */,
 			);
 			name = cascades;
 			sourceTree = "<group>";
@@ -114,6 +118,7 @@
 				50C3FC4C1C775F8600D16E07 /* blink.h */,
 				50C3FC4B1C775F8600D16E07 /* blink.cpp */,
 				50647A781CA9710D00E77D91 /* DetectBlink.swift */,
+				50A8F55A1CC41A48008F33A3 /* DetectSmile.swift */,
 			);
 			name = coreDetector;
 			sourceTree = "<group>";
@@ -144,17 +149,18 @@
 		50F3948B1BF771FD00B4F571 /* Blink */ = {
 			isa = PBXGroup;
 			children = (
+				50A8F5511CC41371008F33A3 /* UIImageExtension.swift */,
 				50C3FC451C775EF900D16E07 /* Blink-Bridging-Header.h */,
 				50C3FC441C775AC600D16E07 /* OpenCVWrapper.h */,
 				50C3FC461C775EF900D16E07 /* OpenCVWrapper.mm */,
+				50A8F5571CC41510008F33A3 /* ViewController.swift */,
 				50C3FC471C775EF900D16E07 /* UIImage+OpenCV.h */,
 				50C3FC481C775EF900D16E07 /* UIImage+OpenCV.mm */,
 				50F3948C1BF771FD00B4F571 /* AppDelegate.swift */,
-				50F3948E1BF771FD00B4F571 /* ViewController.swift */,
-				50F394901BF771FD00B4F571 /* Main.storyboard */,
-				50F394931BF771FD00B4F571 /* Assets.xcassets */,
+				50A8F55C1CC41A5D008F33A3 /* Assets.xcassets */,
+				50A8F55D1CC41A5D008F33A3 /* Main.storyboard */,
+				50A8F55E1CC41A5D008F33A3 /* PhotoViewController.swift */,
 				50F394981BF771FD00B4F571 /* Info.plist */,
-				505733F11CA193D6001752CC /* UIImageExtension.swift */,
 				50647A7A1CA992D800E77D91 /* DrawView.swift */,
 			);
 			path = Blink;
@@ -295,11 +301,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				505733E91CA16F55001752CC /* eyes.xml in Resources */,
-				505733EC1CA16F60001752CC /* opened_eye.xml in Resources */,
-				50F394941BF771FD00B4F571 /* Assets.xcassets in Resources */,
-				505733EA1CA16F55001752CC /* face.xml in Resources */,
-				50F394921BF771FD00B4F571 /* Main.storyboard in Resources */,
+				50A8F5601CC41A5D008F33A3 /* Main.storyboard in Resources */,
+				50A8F5671CC41A78008F33A3 /* opened_eye.xml in Resources */,
+				50A8F5651CC41A78008F33A3 /* eyes.xml in Resources */,
+				50A8F55F1CC41A5D008F33A3 /* Assets.xcassets in Resources */,
+				50A8F5661CC41A78008F33A3 /* face.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,13 +331,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				50C3FC4A1C775EF900D16E07 /* UIImage+OpenCV.mm in Sources */,
-				50F3948F1BF771FD00B4F571 /* ViewController.swift in Sources */,
 				50647A7B1CA992D800E77D91 /* DrawView.swift in Sources */,
+				50A8F55B1CC41A48008F33A3 /* DetectSmile.swift in Sources */,
 				50647A791CA9710D00E77D91 /* DetectBlink.swift in Sources */,
+				50A8F5581CC41510008F33A3 /* ViewController.swift in Sources */,
 				50C3FC4D1C775F8600D16E07 /* blink.cpp in Sources */,
 				50F3948D1BF771FD00B4F571 /* AppDelegate.swift in Sources */,
+				50A8F5521CC41371008F33A3 /* UIImageExtension.swift in Sources */,
 				50C3FC491C775EF900D16E07 /* OpenCVWrapper.mm in Sources */,
-				505733F21CA193D6001752CC /* UIImageExtension.swift in Sources */,
+				50A8F5611CC41A5D008F33A3 /* PhotoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,17 +373,6 @@
 			targetProxy = 50F394A91BF771FD00B4F571 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		50F394901BF771FD00B4F571 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				50F394911BF771FD00B4F571 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		50F394AF1BF771FD00B4F571 /* Debug */ = {
