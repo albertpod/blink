@@ -13,24 +13,7 @@
 cv::CascadeClassifier face_cascade;
 cv::CascadeClassifier eyes_cascade;
 cv::CascadeClassifier one_eye_cascade;
-
-struct timeval
-timespec_diff(struct timeval *start, struct timeval *stop)
-{
-    struct timeval result;
-    
-    if ((stop->tv_usec - start->tv_usec) < 0)
-    {
-        result.tv_sec = stop->tv_sec - start->tv_sec - 1;
-        result.tv_usec = stop->tv_usec - start->tv_usec + MILLION;
-    }
-    else
-    {
-        result.tv_sec = stop->tv_sec - start->tv_sec;
-        result.tv_usec = stop->tv_usec - start->tv_usec;
-    }
-    return result;
-}
+cv::CascadeClassifier smile_cascade;
 
 void clearEyes(eyeStruct *rightEye, eyeStruct *leftEye)
 {
@@ -38,8 +21,6 @@ void clearEyes(eyeStruct *rightEye, eyeStruct *leftEye)
     rightEye->blinked = false;
     leftEye->isClosed = false;
     rightEye->isClosed = false;
-    memset(&leftEye->start, '\0', sizeof(leftEye->start));
-    memset(&rightEye->start, '\0', sizeof(rightEye->start));
 }
 
 void
@@ -69,25 +50,21 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
     one_eye_cascade.load(openHaar);
     
     face_cascade.detectMultiScale(image, faces, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
-    for (int i = 0; i < faces.size(); i++)
+    if (faces.size() == 1)
     {
-        cv::Mat face = image(faces[i]);
+        faces[0] = cv::Rect(faces[0].x, faces[0].y, faces[0].width, faces[0].height / 2);
+        cv::Mat face = image(faces[0]);
         eyes_cascade.detectMultiScale(face, eyes, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
-        for (int j = 0; j < eyes.size(); j++)
+        if (eyes.size() == 1)
         {
-            cv::Mat detectedEyes = face(eyes[j]);
-            #pragma omp parallel
-            {
-                rightEye.eye = detectedEyes(cv::Range(0, detectedEyes.rows), cv::Range(0, detectedEyes.cols / 2)).clone();
-                detectEyeStatus(rightEye, right, true);
+            cv::Mat detectedEyes = face(eyes[0]);
+            rightEye.eye = detectedEyes(cv::Range(0, detectedEyes.rows), cv::Range(0, detectedEyes.cols / 2)).clone();
+            detectEyeStatus(rightEye, right, true);
                 
-                leftEye.eye = detectedEyes(cv::Range(0, detectedEyes.rows), cv::Range(detectedEyes.cols / 2, detectedEyes.cols)).clone();
-                detectEyeStatus(leftEye, left, false);
-                
-            }
+            leftEye.eye = detectedEyes(cv::Range(0, detectedEyes.rows), cv::Range(detectedEyes.cols / 2, detectedEyes.cols)).clone();
+            detectEyeStatus(leftEye, left, false);
             
-            if ((leftEye.isClosed != rightEye.isClosed)
-                /*&& (rightEye.blinked ^ leftEye.blinked)*/)
+            if (leftEye.isClosed != rightEye.isClosed)
             {
                 cout << (leftEye.isClosed ? "left" : "right");
                 clearEyes(&leftEye, &rightEye);
@@ -103,6 +80,29 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
     if (faces.size() == 0)
     {
         clearEyes(&leftEye, &rightEye);
+    }
+    return false;
+}
+
+bool
+detectSmile(cv::Mat &image, std::string faceHaar, std::string smileHaar)
+{
+    cv::Mat tpl;
+    cv::Rect rect;
+    vector<cv::Rect> faces, smile;
+    face_cascade.load(faceHaar);
+    smile_cascade.load(smileHaar);
+    face_cascade.detectMultiScale(image, faces, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
+    if (faces.size() == 1)
+    {
+        faces[0] = cv::Rect(faces[0].x, faces[0].y + faces[0].height / 2, faces[0].width, faces[0].height / 2);
+        cv::Mat face = image(faces[0]);
+        smile_cascade.detectMultiScale(face, smile, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(20, 20));
+        if (smile.size() != 0)
+        {
+            return true;
+        }
+        
     }
     return false;
 }

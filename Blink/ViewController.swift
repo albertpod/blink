@@ -59,8 +59,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
     }
     
-    override func  preferredStatusBarStyle()-> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override func  prefersStatusBarHidden() -> Bool {
+        return false
     }
     
     func configureDevice() {
@@ -125,9 +125,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         if counter <= 0 {
             captureSession.stopRunning()
             detectedBlink = false
-            performSegueWithIdentifier("showPhoto", sender : nil)
             timer.invalidate()
             counter = 5
+            performSegueWithIdentifier("showPhoto", sender : nil)
         }
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
@@ -138,12 +138,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             /*dispatch_async(dispatch_get_main_queue(), {
                 self.shareToInstagram(uiImage!)
             })*/
-            print("hho")
+            print("blinked")
             timer = NSTimer(fireDate: NSDate().dateByAddingTimeInterval(0), interval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         }
-
-        detectedSmile = detectSmile(uiImage)
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
         
         //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "imageSaveMethod:didFinishSavingWithError:contextInfo:", nil);
@@ -155,13 +153,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 destination.postingPhoto = uiImage
             }
         }
-    }
-}
-extension UIViewController {
-    func canPerformSegue(id: String) -> Bool {
-        let segues = self.valueForKey("storyboardSegueTemplates") as? [NSObject]
-        let filtered = segues?.filter({ $0.valueForKey("identifier") as? String == id })
-        return (filtered?.count > 0) ?? false
     }
 }
 /*https://www.hackingwithswift.com/example-code/system/how-to-run-code-at-a-specific-time*/

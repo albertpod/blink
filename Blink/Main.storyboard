@@ -44,7 +44,7 @@
         <!--Photo View Controller-->
         <scene sceneID="A8d-Ea-Ftg">
             <objects>
-                <viewController id="hkn-QJ-n85" customClass="PhotoViewController" customModule="Blink" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hkn-QJ-n85" customClass="PhotoViewController" customModule="Blink" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="qJ7-gp-ZJe"/>
                         <viewControllerLayoutGuide type="bottom" id="yne-BG-Klg"/>
@@ -60,35 +60,86 @@
                                 <rect key="frame" x="0.0" y="119" width="320" height="320"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3U7-xB-VEl">
-                                <rect key="frame" x="136" y="456" width="49" height="50"/>
+                                <rect key="frame" x="136" y="456" width="50" height="50"/>
                                 <state key="normal" image="back button"/>
                                 <connections>
-                                    <segue destination="sdN-3K-1Zu" kind="show" id="pht-5t-40R"/>
+                                    <segue destination="sdN-3K-1Zu" kind="show" identifier="Back" id="pht-5t-40R"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="smile to share" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gjj-1D-1G9">
-                                <rect key="frame" x="103" y="65" width="114" height="40"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <color key="textColor" red="1" green="0.6677595408" blue="0.9829951844" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                                <color key="shadowColor" red="0.76426649089999998" green="0.25988050579999999" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
-                                <size key="shadowOffset" width="2" height="1"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="sendedPhoto" destination="uBu-8K-WsE" id="Wzn-QC-Cc3"/>
+                        <segue destination="Lrf-Xc-Cxr" kind="show" identifier="share" id="4Ri-eS-Q7D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p17-Xm-rol" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="793" y="506"/>
+            <point key="canvasLocation" x="772" y="506"/>
+        </scene>
+        <!--Share View Controller-->
+        <scene sceneID="Thy-Sb-iIo">
+            <objects>
+                <viewController storyboardIdentifier="Share" id="Lrf-Xc-Cxr" customClass="ShareViewController" customModule="Blink" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="KrW-TZ-OFY"/>
+                        <viewControllerLayoutGuide type="bottom" id="hKs-Qh-t8L"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="W9m-p4-6iZ">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="Tbg-tX-sAi">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DZT-z5-nWH">
+                                <rect key="frame" x="136" y="456" width="50" height="50"/>
+                                <state key="normal" image="back button"/>
+                                <connections>
+                                    <segue destination="sdN-3K-1Zu" kind="show" id="IFD-2R-eWc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XgL-1s-d1R">
+                                <rect key="frame" x="143" y="80" width="40" height="40"/>
+                                <state key="normal" image="vk"/>
+                                <connections>
+                                    <action selector="shareVK:" destination="Lrf-Xc-Cxr" eventType="touchUpInside" id="Cai-B2-h8y"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lzw-8F-0e0">
+                                <rect key="frame" x="238" y="80" width="40" height="40"/>
+                                <state key="normal" image="facebook"/>
+                                <connections>
+                                    <action selector="shareFacebook:" destination="Lrf-Xc-Cxr" eventType="touchUpInside" id="7t7-DC-IuY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Cw-ll-smp">
+                                <rect key="frame" x="45" y="80" width="40" height="40"/>
+                                <state key="normal" image="instagram"/>
+                                <connections>
+                                    <action selector="shareInstagram:" destination="Lrf-Xc-Cxr" eventType="touchUpInside" id="bqb-tg-QkT"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TKp-mH-M9p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1198" y="506"/>
         </scene>
     </scenes>
     <resources>
         <image name="back button" width="64" height="64"/>
         <image name="background" width="640" height="1136"/>
+        <image name="facebook" width="64" height="64"/>
+        <image name="instagram" width="64" height="64"/>
+        <image name="vk" width="64" height="64"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="IFD-2R-eWc"/>
+    </inferredMetricsTieBreakers>
 </document>

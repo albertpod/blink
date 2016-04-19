@@ -8,38 +8,40 @@
 
 import UIKit
 import AVFoundation
+import SwiftyVK
 
-class PhotoViewController: UIViewController, UIDocumentInteractionControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
+class PhotoViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     @IBOutlet weak var sendedPhoto: UIImageView!
-    var documentController: UIDocumentInteractionController!
+    
     var postingPhoto : UIImage?
-    var captureSession = AVCaptureSession()
-    var captureDevice : AVCaptureDevice?
-    var videoCaptureOutput = AVCaptureVideoDataOutput()
+    var shareCaptureSession = AVCaptureSession()
+    var shareCaptureDevice : AVCaptureDevice?
+    var shareVideoCaptureOutput = AVCaptureVideoDataOutput()
     
     override func viewDidLoad() {
         sendedPhoto.image = postingPhoto
         let devices = AVCaptureDevice.devices()
-        
         // Loop through all the capture devices on this phone
         for device in devices {
             // Make sure this particular device supports video
             if (device.hasMediaType(AVMediaTypeVideo)) {
                 // Finally check the position and confirm we've got the back camera
                 if(device.position == AVCaptureDevicePosition.Front) {
-                    captureDevice = device as? AVCaptureDevice
-                    if captureDevice != nil {
-                        print("Capture device found")
-                        beginCheckingSmile()
+                    shareCaptureDevice = device as? AVCaptureDevice
+                    if shareCaptureDevice != nil {
+                        beginCheck()
                     }
                 }
             }
         }
 
     }
+    override func viewDidAppear(animated: Bool) {
+        self.setNeedsStatusBarAppearanceUpdate()
+    }
     
     func configureDevice() {
-        if let device = captureDevice {
+        if let device = shareCaptureDevice {
             do {
                 try device.lockForConfiguration()
                 
@@ -51,28 +53,40 @@ class PhotoViewController: UIViewController, UIDocumentInteractionControllerDele
         
     }
 
-    func beginCheckingSmile() {
+    func beginCheck() {
         
         configureDevice()
         do {
-            try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
+            try shareCaptureSession.addInput(AVCaptureDeviceInput(device: shareCaptureDevice))
         } catch let error as NSError {
             print(error.code)
         }
         
         let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
         
-        videoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
+        shareVideoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
         
-        videoCaptureOutput.setSampleBufferDelegate(self, queue: cameraQueue)
+        shareVideoCaptureOutput.setSampleBufferDelegate(self, queue: cameraQueue)
         
-        captureSession.addOutput(videoCaptureOutput)
+        shareCaptureSession.addOutput(shareVideoCaptureOutput)
         
-        captureSession.startRunning()
+        shareCaptureSession.startRunning()
     }
 
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
-        print("smile recieved")
+        let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
+        CVPixelBufferLockBaseAddress(pixelBuffer, 0)
+        var uiImage = imageFromSampleBuffer(pixelBuffer)
+        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
+        uiImage = uiImage?.cropsToSquare()
+        let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
+        let smileHaarPath = NSBundle.mainBundle().pathForResource("smile", ofType: "xml")
+        if detectSmile(uiImage)/*OpenCVWrapper.processSmileWithOpenCV(uiImage, faceHaarPath, smileHaarPath)*/ {
+            print("smile recieved")
+            shareCaptureSession.stopRunning()
+            performSegueWithIdentifier("share", sender : nil)
+        }
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -92,37 +106,11 @@ class PhotoViewController: UIViewController, UIDocumentInteractionControllerDele
         }
     }
     
-    func shareToInstagram(image: UIImage) {
-        
-        let instagramURL = NSURL(string: "instagram://app")
-        
-        if (UIApplication.sharedApplication().canOpenURL(instagramURL!)) {
-            
-            let imageData = UIImageJPEGRepresentation(image, 100)
-            let captionString = "caption"
-            let writePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent("instagram.igo")
-            
-            if imageData?.writeToFile(writePath, atomically: true) == false {
-                
-                return
-                
-            } else {
-                
-                let fileURL = NSURL(fileURLWithPath: writePath)
-                
-                self.documentController = UIDocumentInteractionController(URL: fileURL)
-                
-                self.documentController.delegate = self
-                
-                self.documentController.UTI = "com.instagram.exlusivegram"
-                
-                self.documentController.annotation = NSDictionary(object: captionString, forKey: "InstagramCaption")
-                self.documentController.presentOpenInMenuFromRect(self.view.frame, inView: self.view, animated: true)
-                
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "share"){
+            if let destination = segue.destinationViewController as? ShareViewController {
+                destination.uiImage = postingPhoto!
             }
-            
-        } else {
-            print(" Instagram isn't installed ")
         }
     }
 }

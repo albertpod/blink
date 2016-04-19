@@ -14,7 +14,9 @@
 
 @interface OpenCVWrapper : NSObject
 
-+ (bool)processImageWithOpenCV:(UIImage*)inputImage :(NSString*)faceHaar :(NSString*)eyesHaar :(NSString*)openedEyeHaar;
++ (bool)processBlinkWithOpenCV:(UIImage*)inputImage :(NSString*)faceHaar :(NSString*)eyesHaar :(NSString*)openedEyeHaar;
+
++ (bool)processSmileWithOpenCV:(UIImage*)inputImage :(NSString*)faceHaar :(NSString*)smileHaar;
 
 @end
 
