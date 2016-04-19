@@ -81,7 +81,7 @@ class PhotoViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffe
         uiImage = uiImage?.cropsToSquare()
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let smileHaarPath = NSBundle.mainBundle().pathForResource("smile", ofType: "xml")
-        if detectSmile(uiImage)/*OpenCVWrapper.processSmileWithOpenCV(uiImage, faceHaarPath, smileHaarPath)*/ {
+        if OpenCVWrapper.processSmileWithOpenCV(uiImage, faceHaarPath, smileHaarPath) {//detectSmile(uiImage)
             print("smile recieved")
             shareCaptureSession.stopRunning()
             performSegueWithIdentifier("share", sender : nil)

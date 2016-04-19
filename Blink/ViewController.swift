@@ -132,9 +132,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
-        detectedBlink = detectEyeBlink(uiImage)
-        if detectedBlink && counter == 5
-        /*OpenCVWrapper.processImageWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)*/ {
+        detectedBlink = OpenCVWrapper.processBlinkWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)//detectEyeBlink(uiImage)
+        if detectedBlink && counter == 5 {
             /*dispatch_async(dispatch_get_main_queue(), {
                 self.shareToInstagram(uiImage!)
             })*/

@@ -122,10 +122,17 @@
                                     <action selector="shareInstagram:" destination="Lrf-Xc-Cxr" eventType="touchUpInside" id="bqb-tg-QkT"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="cJ6-i4-YB2">
+                                <rect key="frame" x="145" y="128" width="37" height="37"/>
+                                <color key="color" red="0.9963626354747176" green="0.97278417766506109" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="vkActivityUploading" destination="cJ6-i4-YB2" id="mPN-fE-2fj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TKp-mH-M9p" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

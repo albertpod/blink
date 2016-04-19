@@ -14,6 +14,8 @@ class ShareViewController: UIViewController, UIDocumentInteractionControllerDele
     
     var uiImage : UIImage?
     
+    @IBOutlet weak var vkActivityUploading: UIActivityIndicatorView!
+    
     @IBAction func shareInstagram(sender: AnyObject) {
         if let shareImage = uiImage {
             shareToInstagram(shareImage)
@@ -22,7 +24,14 @@ class ShareViewController: UIViewController, UIDocumentInteractionControllerDele
     
     @IBAction func shareVK(sender: AnyObject) {
         if let shareImage = uiImage {
+            vkActivityUploading.startAnimating()
             APIWorker.uploadPhoto(shareImage)
+            sleep(2)
+            vkActivityUploading.stopAnimating()
+            //vkActivityUploading.stopAnimating()
+            /*let ac = UIAlertController(title: "Downloaded!", message: "Congrats.", preferredStyle: .Alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+            presentViewController(ac, animated: true, completion: nil)*/
         }
     }
     

@@ -11,6 +11,7 @@
 #include <time.h>
 
 cv::CascadeClassifier face_cascade;
+cv::CascadeClassifier face_cascade2;
 cv::CascadeClassifier eyes_cascade;
 cv::CascadeClassifier one_eye_cascade;
 cv::CascadeClassifier smile_cascade;
@@ -48,7 +49,6 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
     eyes_cascade.load(eyesHaar);
     face_cascade.load(faceHaar);
     one_eye_cascade.load(openHaar);
-    
     face_cascade.detectMultiScale(image, faces, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
     if (faces.size() == 1)
     {
@@ -66,7 +66,6 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
             
             if (leftEye.isClosed != rightEye.isClosed)
             {
-                cout << (leftEye.isClosed ? "left" : "right");
                 clearEyes(&leftEye, &rightEye);
                 return true;
             }
@@ -90,9 +89,9 @@ detectSmile(cv::Mat &image, std::string faceHaar, std::string smileHaar)
     cv::Mat tpl;
     cv::Rect rect;
     vector<cv::Rect> faces, smile;
-    face_cascade.load(faceHaar);
+    face_cascade2.load(faceHaar);
     smile_cascade.load(smileHaar);
-    face_cascade.detectMultiScale(image, faces, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
+    face_cascade2.detectMultiScale(image, faces, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
     if (faces.size() == 1)
     {
         faces[0] = cv::Rect(faces[0].x, faces[0].y + faces[0].height / 2, faces[0].width, faces[0].height / 2);
