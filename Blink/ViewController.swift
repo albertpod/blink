@@ -6,6 +6,7 @@ var cameraView : UIView!
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     @IBOutlet weak var timerLabel: UILabel!
+    var numcard = 0
     var counter = 5
     var uiImage : UIImage?
     var timer = NSTimer()
@@ -46,7 +47,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         for device in devices {
             // Make sure this particular device supports video
             if (device.hasMediaType(AVMediaTypeVideo)) {
-                // Finally check the position and confirm we've got the back camera
+                // Finally check the position and confirm we've got the front camera
                 if(device.position == AVCaptureDevicePosition.Front) {
                     captureDevice = device as? AVCaptureDevice
                     if captureDevice != nil {
@@ -111,11 +112,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection:AVCaptureConnection!) {
-        
-        //print("frame dropped")
+        print("dropped")
     }
     
-    func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer: CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
+    func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer:CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
         print("frame recieved")
         let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
         CVPixelBufferLockBaseAddress(pixelBuffer, 0)
@@ -132,8 +132,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
-        detectedBlink = OpenCVWrapper.processBlinkWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)//detectEyeBlink(uiImage)
-        if detectedBlink && counter == 5 {
+        
+        if OpenCVWrapper.processBlinkWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath) && counter == 5 {
             /*dispatch_async(dispatch_get_main_queue(), {
                 self.shareToInstagram(uiImage!)
             })*/
@@ -144,6 +144,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
         
         //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "imageSaveMethod:didFinishSavingWithError:contextInfo:", nil);
+        numcard += 1
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

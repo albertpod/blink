@@ -5,8 +5,6 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>instagram</string>
-		<string>vk</string>
-		<string>vk-share</string>
 		<string>vkauthorize</string>
 		<string>vk5423543</string>
 	</array>

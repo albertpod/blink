@@ -13,8 +13,6 @@
 
 #include <opencv2/opencv.hpp>
 
-/* http://stackoverflow.com/questions/30908593/using-opencv-in-swift-ios */
-
 @implementation OpenCVWrapper : NSObject
 
 + (bool)processBlinkWithOpenCV:(UIImage *)inputImage :(NSString *)faceHaar :(NSString *)eyesHaar :(NSString*)openedEyeHaar {

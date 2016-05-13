@@ -13,6 +13,7 @@ import SwiftyVK
 class ShareViewController: UIViewController, UIDocumentInteractionControllerDelegate {
     
     var uiImage : UIImage?
+    var documentController: UIDocumentInteractionController!
     
     @IBOutlet weak var vkActivityUploading: UIActivityIndicatorView!
     
@@ -38,16 +39,16 @@ class ShareViewController: UIViewController, UIDocumentInteractionControllerDele
     
     @IBAction func shareFacebook(sender: AnyObject) {
         if let shareImage = uiImage {
-            let shareToFacebook : SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            shareToFacebook.setInitialText("#Blink")
-            shareToFacebook.addImage(shareImage)
-            self.presentViewController(shareToFacebook, animated: true, completion: nil)
+            if SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook) {
+                let shareToFacebook : SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+                shareToFacebook.setInitialText("#Blink")
+                shareToFacebook.addImage(shareImage)
+                self.presentViewController(shareToFacebook, animated: true, completion: nil)
+            }
         }
     }
     override func viewDidAppear(animated: Bool) {
     }
-    
-    var documentController: UIDocumentInteractionController!
     
     func shareToInstagram(image: UIImage) {
         
