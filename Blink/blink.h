@@ -26,7 +26,7 @@ typedef struct eyeStruct
     
 } eyeStatus;
 
-bool detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::string openHaar);
+string detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::string openHaar);
 void detectEyeStatus(eyeStruct &detectedEye, vector<cv::Rect> eyeRect, bool isRight);
 
 bool detectSmile(cv::Mat &image, std::string faceHaar, std::string smileHaar);

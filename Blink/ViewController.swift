@@ -1,14 +1,19 @@
 import UIKit
 import AVFoundation
+import CoreMotion
 
-var cameraView : UIView!
+var motionManager: CMMotionManager!
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
-    
+    @IBOutlet weak var blinkLabel: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
-    var numcard = 0
+    var bug = false
+    var fixMe = 0
     var counter = 5
+    var cameraView : UIView!
+    var bounds : CGRect!
     var uiImage : UIImage?
+    var blinked = "None"
     var timer = NSTimer()
     var detectedBlink = false
     var detectedSmile = false
@@ -16,20 +21,24 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     let captureSession = AVCaptureSession()
     var previewLayer : AVCaptureVideoPreviewLayer?
     var videoCaptureOutput = AVCaptureVideoDataOutput()
-    // If we find a device we'll store it here for later use
     var captureDevice : AVCaptureDevice?
+    var orientations:UIInterfaceOrientation = UIApplication.sharedApplication().statusBarOrientation
     
     func timerAction() {
-            counter -= 1
+        counter -= 1
+        if counter == 0 {
             timerLabel.text = "\(counter)"
+            return
+        }
+        timerLabel.text = "\(counter)"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*let darkBlur = UIBlurEffect(style: UIBlurEffectStyle.Dark)
-        let blurView = UIVisualEffectView(effect: darkBlur)
-        blurView.frame = self.view.bounds
-        self.view.addSubview(blurView)*/
+        blinkLabel.text = "Wait"
+        motionManager = CMMotionManager()
+        motionManager.startAccelerometerUpdates()
+        
         print(self.view.bounds)
         
         cameraView = UIView(frame: CGRectMake(0, self.view.frame.width / 4, self.view.frame.size.width, self.view.frame.size.width))
@@ -68,7 +77,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         if let device = captureDevice {
             do {
                 try device.lockForConfiguration()
-                
+                device.activeVideoMinFrameDuration = CMTimeMake(1, 8)
+                device.activeVideoMinFrameDuration = CMTimeMake(1, 8)
             } catch let error as NSError {
                 print(error.code)
             }
@@ -79,11 +89,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     func beginSession() {
         
-        var bounds : CGRect
-
         let cameraQueue = dispatch_queue_create("cameraQueue", DISPATCH_QUEUE_SERIAL)
         
-        configureDevice()
         do {
             try captureSession.addInput(AVCaptureDeviceInput(device: captureDevice))
         } catch let error as NSError {
@@ -96,10 +103,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         previewLayer!.bounds = bounds
         previewLayer!.position = CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))
-        //previewLayer!.cornerRadius = 10
-        
-        //previewLayer!.borderColor = UIColor.whiteColor().colorWithAlphaComponent(0.5).CGColor
-        self.view.layer.addSublayer(previewLayer!)
         
         videoCaptureOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey:Int(kCVPixelFormatType_32BGRA)]
         
@@ -109,6 +112,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         
         captureSession.startRunning()
         
+        configureDevice()
+        
+        self.view.layer.addSublayer(previewLayer!)
+        
     }
     
     func captureOutput(captureOutput: AVCaptureOutput!, didDropSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection:AVCaptureConnection!) {
@@ -116,43 +123,72 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
     
     func captureOutput(captureOutput: AVCaptureOutput, didOutputSampleBuffer sampleBuffer:CMSampleBufferRef, fromConnection connection: AVCaptureConnection) {
+        dispatch_async(dispatch_get_main_queue(), {
+                self.blinkLabel.text = "Blink me"
+            })
         print("frame recieved")
         let pixelBuffer: CVImageBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
         CVPixelBufferLockBaseAddress(pixelBuffer, 0)
         uiImage = imageFromSampleBuffer(pixelBuffer)
-        uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
+        if let accelerometerData = motionManager.accelerometerData {
+            let angle = atan2(accelerometerData.acceleration.y, accelerometerData.acceleration.x)*180/M_PI
+            print(angle)
+            if (fabs(angle) <= 45){
+                self.timerLabel.transform = CGAffineTransformMakeRotation(CGFloat(3*M_PI_2))
+                print("landscape left")
+            } else if ((fabs(angle) > 45) && (fabs(angle) < 135)) {
+                if (angle > 0) {
+                    uiImage = uiImage?.imageRotatedByDegrees(270, flip: false)
+                    self.timerLabel.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+                    print("portrait upside down")
+                    
+                } else {
+                    uiImage = uiImage?.imageRotatedByDegrees(90, flip: false)
+                    self.timerLabel.transform = CGAffineTransformMakeRotation(CGFloat(0))
+                    print("portrait")
+                    
+                }
+            } else {
+                uiImage = uiImage?.imageRotatedByDegrees(180, flip: false)
+                self.timerLabel.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+                print("landscape right")
+                
+            }
+        }
         uiImage = uiImage?.cropsToSquare()
-        if counter <= 0 {
-            captureSession.stopRunning()
-            detectedBlink = false
+        if counter == 0 {
             timer.invalidate()
             counter = 5
+            fixMe = 0
             performSegueWithIdentifier("showPhoto", sender : nil)
         }
         let faceHaarPath = NSBundle.mainBundle().pathForResource("face", ofType:"xml")
         let eyesHaarPath = NSBundle.mainBundle().pathForResource("eyes", ofType:"xml")
         let openedEyePath = NSBundle.mainBundle().pathForResource("opened_eye", ofType:"xml")
-        
-        if OpenCVWrapper.processBlinkWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath) && counter == 5 {
-            /*dispatch_async(dispatch_get_main_queue(), {
-                self.shareToInstagram(uiImage!)
-            })*/
+        blinked = OpenCVWrapper.processBlinkWithOpenCV(uiImage, faceHaarPath, eyesHaarPath, openedEyePath)
+        if blinked != "None" && counter == 5 {
             print("blinked")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.blinkLabel.text = self.blinked
+            })
             timer = NSTimer(fireDate: NSDate().dateByAddingTimeInterval(0), interval: 1, target: self, selector: #selector(timerAction), userInfo: nil, repeats: true)
             NSRunLoop.mainRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
         }
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
-        
-        //UIImageWriteToSavedPhotosAlbum(uiImage!, self, "imageSaveMethod:didFinishSavingWithError:contextInfo:", nil);
-        numcard += 1
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "showPhoto"){
+            captureSession.stopRunning()
+            captureSession.removeOutput(videoCaptureOutput)
+            do {
+                try captureSession.removeInput(AVCaptureDeviceInput(device: captureDevice))
+            } catch let error as NSError {
+                print(error.code)
+            }
             if let destination = segue.destinationViewController as? PhotoViewController {
                 destination.postingPhoto = uiImage
             }
         }
     }
 }
-/*https://www.hackingwithswift.com/example-code/system/how-to-run-code-at-a-specific-time*/

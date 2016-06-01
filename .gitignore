@@ -1,3 +1,4 @@
 .idea
-.DetectBlink.swift
-.DetectSmile.swift
+DetectBlink.swift
+DetectSmile.swift
+DetectFace.swift

@@ -20,10 +20,16 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="EDk-Ku-b0k">
                                 <rect key="frame" x="0.0" y="0.0" width="325" height="570"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Blink me" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sd9-2v-Tlp">
+                                <rect key="frame" x="85" y="49" width="151" height="23"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
+                                <color key="textColor" red="0.20392156859999999" green="0.050980392159999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.75" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fZ7-uk-og8">
                                 <rect key="frame" x="141" y="463" width="42" height="44"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="50"/>
-                                <color key="textColor" red="0.76426649085335896" green="0.25988050578864264" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.20392156859999999" green="0.050980392159999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" red="0.85934628830000004" green="0.7552271438" blue="1" alpha="0.62276400860000003" colorSpace="calibratedRGB"/>
                                 <size key="shadowOffset" width="1" height="-1"/>
@@ -33,6 +39,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="blinkLabel" destination="Sd9-2v-Tlp" id="WOi-KC-MgS"/>
                         <outlet property="timerLabel" destination="fZ7-uk-og8" id="Mo5-Sa-L0H"/>
                         <segue destination="hkn-QJ-n85" kind="show" identifier="showPhoto" id="Cy6-aO-sAQ"/>
                     </connections>
@@ -66,12 +73,25 @@
                                     <segue destination="sdN-3K-1Zu" kind="show" identifier="Back" id="pht-5t-40R"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="lpL-qT-f8w">
+                                <rect key="frame" x="142" y="61" width="37" height="37"/>
+                                <color key="color" red="0.20392156859999999" green="0.050980392159999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQB-9Y-5BP">
+                                <rect key="frame" x="50" y="52" width="223" height="56"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
+                                <state key="normal" title="Smile to continue">
+                                    <color key="titleColor" red="0.20392156859999999" green="0.050980392159999999" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="sendedPhoto" destination="uBu-8K-WsE" id="Wzn-QC-Cc3"/>
+                        <outlet property="smileButton" destination="PQB-9Y-5BP" id="K2x-TY-DXR"/>
+                        <outlet property="smileSegueActivity" destination="lpL-qT-f8w" id="3qW-Vw-6If"/>
                         <segue destination="Lrf-Xc-Cxr" kind="show" identifier="share" id="4Ri-eS-Q7D"/>
                     </connections>
                 </viewController>

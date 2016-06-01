@@ -15,12 +15,12 @@
 
 @implementation OpenCVWrapper : NSObject
 
-+ (bool)processBlinkWithOpenCV:(UIImage *)inputImage :(NSString *)faceHaar :(NSString *)eyesHaar :(NSString*)openedEyeHaar {
++ (NSString*)processBlinkWithOpenCV:(UIImage *)inputImage :(NSString *)faceHaar :(NSString *)eyesHaar :(NSString*)openedEyeHaar {
     cv::Mat mat = [inputImage CVMat];
     std::string *facehaar = new std::string([faceHaar UTF8String]);
     std::string *eyeshaar = new std::string([eyesHaar UTF8String]);
     std::string *openhaar = new std::string([openedEyeHaar UTF8String]);
-    return detectBlink(mat, *facehaar, *eyeshaar, *openhaar);
+    return [NSString stringWithUTF8String:detectBlink(mat, *facehaar, *eyeshaar, *openhaar).c_str()];;
 }
 
 + (bool)processSmileWithOpenCV:(UIImage*)inputImage :(NSString*)faceHaar :(NSString*)smileHaar {

@@ -38,7 +38,7 @@ detectEyeStatus(eyeStruct &detectedEye, vector<cv::Rect> eyeRect, bool isRight)
     }
 }
 
-bool
+string
 detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::string openHaar)
 {
     cv::Mat tpl;
@@ -67,7 +67,7 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
             if (leftEye.isClosed != rightEye.isClosed)
             {
                 clearEyes(&leftEye, &rightEye);
-                return true;
+                return (leftEye.isClosed ? "Left blink" : "Right blink");
             }
             
         }
@@ -80,7 +80,7 @@ detectBlink(cv::Mat &image, std::string faceHaar, std::string eyesHaar, std::str
     {
         clearEyes(&leftEye, &rightEye);
     }
-    return false;
+    return "None";
 }
 
 bool
